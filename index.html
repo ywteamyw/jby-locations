@@ -58,15 +58,15 @@ main{padding-top:128px}
 .loc-head h1{font-family:'Mesmerize',sans-serif;font-weight:300;font-size:32px;line-height:48px;letter-spacing:0;text-transform:uppercase;color:#111;margin:0}
 .loc-head p{font-family:'Myriad Pro',sans-serif;font-weight:300;font-size:20px;line-height:28px;color:var(--mute);margin:8px 0 0;max-width:none;white-space:nowrap}
 
-/* FILTER TABS (Our Team facet style — one line) */
-.loc-filter{display:flex;flex-wrap:wrap;gap:32px;align-items:baseline;margin-top:36px;
-  border-bottom:1px solid var(--line);padding-bottom:0}
-.loc-filter button{font-family:'Myriad Pro',sans-serif;font-size:16px;line-height:1.3;color:#7a7a82;font-weight:300;
-  display:inline-flex;align-items:baseline;gap:8px;padding:0 0 16px;transition:color .15s;white-space:nowrap}
-.loc-filter button .n{font-size:16px;opacity:0.7;font-variant-numeric:tabular-nums}
+/* FILTER TABS (Our Team facet style — one line, no baseline rule) */
+.loc-filter{display:flex;flex-wrap:wrap;gap:34px;align-items:baseline;margin-top:36px;padding-bottom:0}
+.loc-filter button{font-family:'Myriad Pro',sans-serif;font-size:16px;line-height:1.3;color:#5f5f68;font-weight:400;
+  display:inline-flex;align-items:baseline;gap:8px;padding:0 0 12px;border-bottom:2px solid transparent;
+  transition:color .18s,border-color .18s;white-space:nowrap}
+.loc-filter button .n{font-size:16px;color:#9a9aa2;font-variant-numeric:tabular-nums;transition:color .18s}
 .loc-filter button:hover{color:#111}
-.loc-filter button.on{color:#111;font-weight:400}
-.loc-filter button.on .lbl{box-shadow:inset 0 -1.5px 0 currentColor;padding-bottom:3px}
+.loc-filter button.on{color:#111;font-weight:400;border-bottom-color:#111} /* dark underline spans label + count */
+.loc-filter button.on .n{color:#111}
 
 /* MAP + CARD LIST */
 .loc-body{display:grid;grid-template-columns:496px 1fr;gap:44px;align-items:start;padding-top:40px;padding-bottom:16px}
@@ -74,34 +74,19 @@ main{padding-top:128px}
 #loc-map{height:540px;border-radius:2px;overflow:hidden;background:#e9eef2}
 .loc-note{font-family:'Myriad Pro',sans-serif;font-size:14px;line-height:20px;color:#a2a2a9;margin:14px 2px 0}
 
-.loc-list{display:flex;flex-direction:column;gap:24px}
-.loc-count{font-family:'Myriad Pro',sans-serif;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;color:#a2a2a9;margin:0 2px}
-.loc-card{display:flex;flex-direction:column;background:#fff;border-radius:2px;overflow:hidden;cursor:pointer;
-  box-shadow:0 4px 20px rgba(0,0,0,0.05);color:inherit;
-  transition:transform .5s cubic-bezier(0.22,1,0.36,1), box-shadow .5s ease}
-.loc-card:hover{transform:translateY(-6px);box-shadow:0 20px 46px rgba(0,0,0,0.10)}
-.loc-card.active{box-shadow:0 0 0 1.5px var(--navy),0 20px 46px rgba(0,0,0,0.10)}
-.lc-photo{position:relative;height:210px;overflow:hidden;background:#1a2a3a}
-.lc-photo img{width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(0.22,1,0.36,1)}
-.loc-card:hover .lc-photo img{transform:scale(1.06)}
-.lc-badges{position:absolute;left:12px;top:12px;display:flex;flex-wrap:wrap;gap:6px;z-index:2}
-.loc-badge{font-family:'Mesmerize',sans-serif;font-weight:300;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;
-  color:#fff;background:rgba(65,100,123,0.92);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
-  padding:5px 9px;border-radius:2px;line-height:1}
-.loc-badge.full{background:rgba(20,20,27,0.92)}
-.loc-badge.marina{background:rgba(160,146,111,0.96)}
-.lc-body{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
-.lc-body h3{font-family:'Mesmerize',sans-serif;font-weight:300;font-size:20px;line-height:26px;letter-spacing:0;
-  text-transform:uppercase;color:var(--ink);margin:0}
-.lc-venue{font-family:'Myriad Pro',sans-serif;font-weight:400;font-size:13px;line-height:18px;letter-spacing:0.04em;
-  text-transform:uppercase;color:var(--navy);margin:8px 0 0}
-.lc-addr{font-family:'Myriad Pro',sans-serif;font-weight:300;font-size:15px;line-height:24px;color:var(--mute);margin:12px 0 0}
-.lc-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:18px;
-  border-top:0.5px solid var(--line)}
-.lc-phone{font-family:'Myriad Pro',sans-serif;font-size:15px;color:var(--ink)}
-.lc-cta{font-family:'Mesmerize',sans-serif;font-weight:300;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;
-  color:var(--navy);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:color .2s}
-.lc-cta svg{width:14px;height:14px}
+/* Compact address cards (Figma style — no photos) */
+.loc-list{display:flex;flex-direction:column;gap:18px}
+.loc-card{display:block;background:#fff;border:1px solid var(--line);border-radius:3px;padding:26px 30px 24px;cursor:pointer;color:inherit;
+  transition:box-shadow .3s ease, border-color .3s ease}
+.loc-card:hover{box-shadow:0 14px 34px rgba(0,0,0,0.08);border-color:rgba(0,0,0,0.16)}
+.loc-card.active{border-color:var(--navy);box-shadow:0 14px 34px rgba(65,100,123,0.14)}
+.loc-card h3{font-family:'Mesmerize',sans-serif;font-weight:300;font-size:22px;line-height:28px;letter-spacing:0;
+  text-transform:uppercase;color:#111;margin:0}
+.lc-addr{font-family:'Myriad Pro',sans-serif;font-weight:300;font-size:16px;line-height:24px;color:var(--mute);margin:14px 0 0}
+.lc-phone{font-family:'Myriad Pro',sans-serif;font-weight:300;font-size:16px;line-height:22px;color:var(--mute);margin:4px 0 0}
+.lc-cta{font-family:'Mesmerize',sans-serif;font-weight:300;font-size:14px;letter-spacing:0.04em;text-transform:uppercase;
+  color:var(--navy);display:inline-flex;align-items:center;gap:7px;white-space:nowrap;margin-top:20px;transition:color .2s}
+.lc-cta svg{width:15px;height:15px}
 .loc-card:hover .lc-cta{color:var(--navy-d)} /* colour only, no move */
 .loc-card.hide{display:none}
 
@@ -183,7 +168,7 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
   .loc-filter{gap:16px 20px}
   .loc-filter button{font-size:15px}
 }
-@media (prefers-reduced-motion:reduce){ .reveal,.split-words .w{transition:none;opacity:1;transform:none} .lc-photo img{transition:none} }
+@media (prefers-reduced-motion:reduce){ .reveal,.split-words .w{transition:none;opacity:1;transform:none} }
 </style>
 </head>
 <body>
@@ -218,120 +203,66 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
     <div class="loc-list" id="loc-list">
 
       <a class="loc-card reveal" href="#" id="loc-san-diego-boatyard" data-slug="san-diego-boatyard" data-types="full marina service sales" data-lat="32.7135" data-lng="-117.2330">
-        <div class="lc-photo">
-          <div class="lc-badges"><span class="loc-badge full">Full Service</span><span class="loc-badge marina">Marina</span></div>
-          <img src="./assets/office_san_diego_boatyard.jpg" alt="Jeff Brown Yachts San Diego Marina and Boatyard" loading="lazy"/>
-        </div>
-        <div class="lc-body">
-          <h3>San Diego Marina &amp; Boatyard</h3>
-          <div class="lc-venue">San Diego Marina</div>
-          <p class="lc-addr">2614 Shelter Island Drive, Suite A<br/>San Diego, CA 92106</p>
-          <div class="lc-foot"><span class="lc-phone">(888) 693-8099</span><span class="lc-cta">View location <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-        </div>
+        <h3>San Diego Marina &amp; Boatyard</h3>
+        <p class="lc-addr">2614 Shelter Island Drive, Suite A, San Diego, CA 92106</p>
+        <p class="lc-phone">+1 619-222-9899</p>
+        <span class="lc-cta">More info <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </a>
 
       <a class="loc-card reveal" href="#" id="loc-san-diego" data-slug="san-diego" data-types="sales service" data-lat="32.7180" data-lng="-117.2270">
-        <div class="lc-photo">
-          <div class="lc-badges"><span class="loc-badge">Sales</span><span class="loc-badge">Service</span></div>
-          <img src="./assets/office_san_diego.jpg" alt="Jeff Brown Yachts San Diego" loading="lazy"/>
-        </div>
-        <div class="lc-body">
-          <h3>San Diego</h3>
-          <div class="lc-venue">Main Office</div>
-          <p class="lc-addr">2330 Shelter Island Drive, Suite 105<br/>San Diego, CA 92106</p>
-          <div class="lc-foot"><span class="lc-phone">(888) 693-8099</span><span class="lc-cta">View location <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-        </div>
+        <h3>San Diego</h3>
+        <p class="lc-addr">2330 Shelter Island Drive, Suite 105, San Diego, CA 92106</p>
+        <p class="lc-phone">+1 619-222-9899</p>
+        <span class="lc-cta">More info <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </a>
 
       <a class="loc-card reveal" href="#" id="loc-newport-harbor" data-slug="newport-harbor" data-types="sales service" data-lat="33.6189" data-lng="-117.9298">
-        <div class="lc-photo">
-          <div class="lc-badges"><span class="loc-badge">Sales</span><span class="loc-badge">Service</span></div>
-          <img src="./assets/office_newport_harbor.jpg" alt="Jeff Brown Yachts Newport Harbor" loading="lazy"/>
-        </div>
-        <div class="lc-body">
-          <h3>Newport Harbor</h3>
-          <div class="lc-venue">Office</div>
-          <p class="lc-addr">3101 West Coast Highway, Suite 130<br/>Newport Beach, CA 92663</p>
-          <div class="lc-foot"><span class="lc-phone">949-524-3143</span><span class="lc-cta">View location <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-        </div>
+        <h3>Newport Harbor</h3>
+        <p class="lc-addr">3101 West Coast Highway, Suite 130, Newport Beach, CA 92663</p>
+        <p class="lc-phone">+1 949-524-3143</p>
+        <span class="lc-cta">More info <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </a>
 
       <a class="loc-card reveal" href="#" id="loc-marina-del-rey" data-slug="marina-del-rey" data-types="marina sales service" data-lat="33.9776" data-lng="-118.4497">
-        <div class="lc-photo">
-          <div class="lc-badges"><span class="loc-badge marina">Marina</span><span class="loc-badge">Service</span></div>
-          <img src="./assets/office_marina_del_rey.webp" alt="Jeff Brown Yachts Marina del Rey" loading="lazy"/>
-        </div>
-        <div class="lc-body">
-          <h3>Marina del Rey</h3>
-          <div class="lc-venue">Esprit Marina del Rey</div>
-          <p class="lc-addr">13900 Marquesas Way<br/>Marina del Rey, CA 90292</p>
-          <div class="lc-foot"><span class="lc-phone">310-295-9236</span><span class="lc-cta">View location <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-        </div>
+        <h3>Marina del Rey</h3>
+        <p class="lc-addr">13900 Marquesas Way, Marina del Rey, CA 90292</p>
+        <p class="lc-phone">+1 310-295-9236</p>
+        <span class="lc-cta">More info <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </a>
 
       <a class="loc-card reveal" href="#" id="loc-sausalito" data-slug="sausalito" data-types="marina sales service" data-lat="37.8637" data-lng="-122.4998">
-        <div class="lc-photo">
-          <div class="lc-badges"><span class="loc-badge marina">Marina</span><span class="loc-badge">Service</span></div>
-          <img src="./assets/office_sausalito.jpg" alt="Jeff Brown Yachts Sausalito" loading="lazy"/>
-        </div>
-        <div class="lc-body">
-          <h3>Sausalito</h3>
-          <div class="lc-venue">Clipper Yacht Harbor</div>
-          <p class="lc-addr">300B Harbor Drive<br/>Sausalito, CA 94965</p>
-          <div class="lc-foot"><span class="lc-phone">415-887-9347</span><span class="lc-cta">View location <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-        </div>
+        <h3>Sausalito</h3>
+        <p class="lc-addr">300B Harbor Drive, Sausalito, CA 94965</p>
+        <p class="lc-phone">+1 510-701-4880</p>
+        <span class="lc-cta">More info <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </a>
 
       <a class="loc-card reveal" href="#" id="loc-seattle" data-slug="seattle" data-types="sales service" data-lat="47.6640" data-lng="-122.4010">
-        <div class="lc-photo">
-          <div class="lc-badges"><span class="loc-badge">Sales</span><span class="loc-badge">Service</span></div>
-          <img src="./assets/office_seattle.jpg" alt="Jeff Brown Yachts Seattle" loading="lazy"/>
-        </div>
-        <div class="lc-body">
-          <h3>Seattle</h3>
-          <div class="lc-venue">Main Office</div>
-          <p class="lc-addr">2288 W Commodore Way, Suite 110<br/>Seattle, WA 98199</p>
-          <div class="lc-foot"><span class="lc-phone">206-274-5257</span><span class="lc-cta">View location <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-        </div>
+        <h3>Seattle</h3>
+        <p class="lc-addr">2288 W Commodore Way, Suite 110, Seattle, WA 98199</p>
+        <p class="lc-phone">+1 206-274-5257</p>
+        <span class="lc-cta">More info <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </a>
 
       <a class="loc-card reveal" href="#" id="loc-kona" data-slug="kona" data-types="sales" data-lat="19.6420" data-lng="-155.9960">
-        <div class="lc-photo">
-          <div class="lc-badges"><span class="loc-badge">Sales</span></div>
-          <img src="./assets/office_kona.jpg" alt="Jeff Brown Yachts Kona" loading="lazy"/>
-        </div>
-        <div class="lc-body">
-          <h3>Kona</h3>
-          <div class="lc-venue">Office</div>
-          <p class="lc-addr">73-4539 Iki Place Kailua<br/>Kona, HI 96740</p>
-          <div class="lc-foot"><span class="lc-phone">808-989-8305</span><span class="lc-cta">View location <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-        </div>
+        <h3>Kona</h3>
+        <p class="lc-addr">73-4539 Iki Place Kailua, Kona, HI 96740</p>
+        <p class="lc-phone">+1 808-989-8305</p>
+        <span class="lc-cta">More info <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </a>
 
       <a class="loc-card reveal" href="#" id="loc-wrightsville-beach" data-slug="wrightsville-beach" data-types="sales service" data-lat="34.2085" data-lng="-77.8020">
-        <div class="lc-photo">
-          <div class="lc-badges"><span class="loc-badge">Sales</span><span class="loc-badge">Service</span></div>
-          <img src="./assets/office_wrightsville_beach.jpg" alt="Jeff Brown Yachts Wrightsville Beach" loading="lazy"/>
-        </div>
-        <div class="lc-body">
-          <h3>Wrightsville Beach</h3>
-          <div class="lc-venue">Office</div>
-          <p class="lc-addr">100 Keel Street<br/>Wrightsville Beach, NC 28480</p>
-          <div class="lc-foot"><span class="lc-phone">910-679-4158</span><span class="lc-cta">View location <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-        </div>
+        <h3>Wrightsville Beach</h3>
+        <p class="lc-addr">100 Keel Street, Wrightsville Beach, NC 28480</p>
+        <p class="lc-phone">+1 910-679-4158</p>
+        <span class="lc-cta">More info <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </a>
 
       <a class="loc-card reveal" href="#" id="loc-charleston" data-slug="charleston" data-types="marina sales service" data-lat="32.7990" data-lng="-79.9560">
-        <div class="lc-photo">
-          <div class="lc-badges"><span class="loc-badge marina">Marina</span><span class="loc-badge">Service</span></div>
-          <img src="./assets/office_charleston.jpg" alt="Jeff Brown Yachts Charleston" loading="lazy"/>
-        </div>
-        <div class="lc-body">
-          <h3>Charleston</h3>
-          <div class="lc-venue">Seabreeze Marina</div>
-          <p class="lc-addr">49 Immigration Street, Suite 101F<br/>Charleston, SC 29403</p>
-          <div class="lc-foot"><span class="lc-phone">843-277-0777</span><span class="lc-cta">View location <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-        </div>
+        <h3>Charleston</h3>
+        <p class="lc-addr">49 Immigration Street, Suite 101F, Charleston, SC 29403</p>
+        <p class="lc-phone">+1 843-277-0777</p>
+        <span class="lc-cta">More info <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </a>
 
     </div>
@@ -439,7 +370,7 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
   }
   function initMap(){
     if(!window.L){return;}
-    map=L.map('loc-map',{scrollWheelZoom:false,zoomControl:true,attributionControl:true,minZoom:2,maxZoom:16,zoomSnap:0.25,zoomDelta:0.5});
+    map=L.map('loc-map',{scrollWheelZoom:true,wheelPxPerZoomLevel:90,zoomControl:true,attributionControl:true,minZoom:2,maxZoom:16,zoomSnap:0.25,zoomDelta:0.5});
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
       subdomains:'abcd',maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'
     }).addTo(map);
