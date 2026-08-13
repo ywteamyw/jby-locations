@@ -76,10 +76,9 @@ main{padding-top:128px}
 
 /* Compact address cards (Figma style — no photos) */
 .loc-list{display:flex;flex-direction:column;gap:18px}
-.loc-card{display:block;background:#fff;border:1px solid var(--line);border-radius:3px;padding:26px 30px 24px;cursor:pointer;color:inherit;
-  transition:box-shadow .3s ease, border-color .3s ease}
-.loc-card:hover{box-shadow:0 14px 34px rgba(0,0,0,0.08);border-color:rgba(0,0,0,0.16)}
-.loc-card.active{border-color:var(--navy);box-shadow:0 14px 34px rgba(65,100,123,0.14)}
+.loc-card{display:block;background:#fff;border:0;border-radius:3px;padding:26px 30px 24px;cursor:pointer;color:inherit;
+  box-shadow:0 3px 16px rgba(0,0,0,0.05);transition:box-shadow .3s ease}
+.loc-card:hover,.loc-card.active{box-shadow:0 14px 34px rgba(0,0,0,0.12)} /* no outline — highlight is shadow only */
 .loc-card h3{font-family:'Mesmerize',sans-serif;font-weight:300;font-size:22px;line-height:28px;letter-spacing:0;
   text-transform:uppercase;color:#111;margin:0}
 .lc-addr{font-family:'Myriad Pro',sans-serif;font-weight:300;font-size:16px;line-height:24px;color:var(--mute);margin:14px 0 0}
@@ -89,6 +88,38 @@ main{padding-top:128px}
 .lc-cta svg{width:15px;height:15px}
 .loc-card:hover .lc-cta{color:var(--navy-d)} /* colour only, no move */
 .loc-card.hide{display:none}
+
+/* OFFICE PREVIEW MODAL (matches home page, with a scale-in) */
+.loc-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;visibility:hidden;transition:opacity .3s ease, visibility 0s linear .3s}
+.loc-modal.open{opacity:1;visibility:visible;transition:opacity .3s ease}
+.loc-modal-veil{position:absolute;inset:0;background:rgba(10,22,32,0.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);cursor:pointer}
+.loc-modal-panel{position:relative;background:var(--paper);width:min(680px,100%);max-height:90vh;overflow:auto;border-radius:4px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.35);display:flex;flex-direction:column;
+  transform:scale(.94) translateY(10px);transition:transform .42s cubic-bezier(0.22,1,0.36,1)}
+.loc-modal.open .loc-modal-panel{transform:scale(1) translateY(0)}
+.loc-modal-close{position:absolute;top:14px;right:14px;z-index:3;width:36px;height:36px;border-radius:2px;
+  background:rgba(255,255,255,0.95);border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--ink);transition:.25s;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.loc-modal-close:hover{background:#fff}
+.loc-modal-close svg{width:18px;height:18px}
+.loc-modal-photo{width:100%;aspect-ratio:2/1;background-size:cover;background-position:center;background-color:#1a2a3a}
+.loc-modal-body{padding:24px 32px 28px}
+.loc-modal-body h3{font-family:'Mesmerize',sans-serif;font-weight:300;font-size:28px;line-height:36px;letter-spacing:0;
+  text-transform:uppercase;color:var(--ink);margin:0 0 6px}
+.loc-modal-subtitle{font-family:'Myriad Pro',sans-serif;font-weight:400;font-size:16px;line-height:23px;color:var(--ink);margin:0 0 18px;opacity:0.85}
+.loc-modal-info{margin:0;padding:14px 0;border-top:0.5px solid var(--line);border-bottom:0.5px solid var(--line)}
+.loc-modal-row{display:grid;grid-template-columns:96px 1fr;gap:28px;padding:6px 0;margin:0}
+.loc-modal-row dt{font-family:'Mesmerize',sans-serif;font-weight:300;font-size:13px;line-height:22px;letter-spacing:0.08em;text-transform:uppercase;color:var(--mute);margin:0}
+.loc-modal-row dd{font-family:'Myriad Pro',sans-serif;font-weight:400;font-size:16px;line-height:22px;color:var(--ink);margin:0}
+.loc-modal-row dd a{color:var(--ink);text-decoration:none;transition:color .2s}
+.loc-modal-row dd a:hover{color:var(--navy)}
+.loc-modal-cta{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:12px 22px;background:var(--navy);color:#fff;
+  font-family:'Mesmerize',sans-serif;font-weight:300;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;border:0;border-radius:1px;cursor:pointer;transition:background .25s}
+.loc-modal-cta:hover{background:var(--navy-d)}
+.loc-modal-cta svg{width:15px;height:15px}
+@media (prefers-reduced-motion:reduce){ .loc-modal-panel{transition:none;transform:none} }
+@media (max-width:600px){ .loc-modal-body{padding:20px 22px 24px} .loc-modal-row{grid-template-columns:78px 1fr;gap:16px} }
 
 /* Leaflet pins styled to match brand */
 .jby-divicon{background:none;border:0}
@@ -269,10 +300,29 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
 
     <div class="loc-map-wrap">
       <div id="loc-map" aria-label="Map of Jeff Brown Yachts locations"></div>
-      <p class="loc-note">Select a pin to preview an office, or a card to center the map.</p>
+      <p class="loc-note">Select a card or map pin to preview an office.</p>
     </div>
   </section>
 </main>
+
+<!-- OFFICE PREVIEW MODAL -->
+<div class="loc-modal" id="loc-modal" aria-hidden="true">
+  <div class="loc-modal-veil" data-close></div>
+  <div class="loc-modal-panel" role="dialog" aria-modal="true" aria-labelledby="loc-modal-title">
+    <button class="loc-modal-close" data-close aria-label="Close preview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="loc-modal-photo" id="loc-modal-photo"></div>
+    <div class="loc-modal-body">
+      <h3 id="loc-modal-title"></h3>
+      <p class="loc-modal-subtitle" id="loc-modal-subtitle"></p>
+      <dl class="loc-modal-info">
+        <div class="loc-modal-row"><dt>Address</dt><dd><a id="loc-modal-address" target="_blank" rel="noopener"></a></dd></div>
+        <div class="loc-modal-row"><dt>Phone</dt><dd><a id="loc-modal-phone"></a></dd></div>
+        <div class="loc-modal-row"><dt>Hours</dt><dd id="loc-modal-hours"></dd></div>
+      </dl>
+      <button class="loc-modal-cta" id="loc-modal-explore" type="button">Explore this office <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+  </div>
+</div>
 
 <section class="expert" id="contact">
   <h2 class="split-words" data-split>How can we help?</h2>
@@ -350,24 +400,45 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
     var el=tab.querySelector('.n');if(el)el.textContent=n;
   });
 
+  // ---- Office metadata for the preview modal (photo/description/hours) ----
+  var OFFICE_META={
+    'san-diego-boatyard':{photo:'office_san_diego_boatyard.jpg',hours:'Mon – Sat, 8am – 5pm',tel:'+16192229899',desc:'This full-service boatyard offers refit, repair, and rigging on the water.'},
+    'san-diego':{photo:'office_san_diego.jpg',hours:'Mon – Sat, 8am – 5pm',tel:'+16192229899',desc:'Our West Coast flagship, representing Axopar, BRABUS, Riva, and Pershing.'},
+    'newport-harbor':{photo:'office_newport_harbor.jpg',hours:'Mon – Sat, 8am – 5pm',tel:'+19495243143',desc:'Our Newport Beach Maritime office. Private management and co-ownership programs.'},
+    'marina-del-rey':{photo:'office_marina_del_rey.webp',hours:'Mon – Sat, 8am – 5pm',tel:'+13102959236',desc:'Our Los Angeles sales office, representing Axopar, BRABUS, and luxury brands.'},
+    'sausalito':{photo:'office_sausalito.jpg',hours:'Mon – Sat, 8am – 5pm',tel:'+15107014880',desc:'Our Bay Area brokerage, representing Riva, Wally, and Pershing.'},
+    'seattle':{photo:'office_seattle.jpg',hours:'Mon – Sat, 8am – 5pm',tel:'+12062745257',desc:'Our Pacific Northwest sales office, representing Axopar, BRABUS, and Riva.'},
+    'kona':{photo:'office_kona.jpg',hours:'By appointment',tel:'+18089898305',desc:'Our Hawaiian outpost. Private viewings by appointment only.'},
+    'wrightsville-beach':{photo:'office_wrightsville_beach.jpg',hours:'Mon – Sat, 8am – 5pm',tel:'+19106794158',desc:'Our East Coast sales office, representing Axopar, BRABUS, and Everglades.'},
+    'charleston':{photo:'office_charleston.jpg',hours:'Mon – Sat, 8am – 5pm',tel:'+18432770777',desc:'Our South Atlantic sales office, representing Axopar, Everglades, and BRABUS.'}
+  };
+
   // ---- Leaflet map ----
   var map=null, markers={};
   function typeClass(c){var t=(c.getAttribute('data-types')||'').split(' ');
     if(t.indexOf('full')>-1)return' full';if(t.indexOf('marina')>-1)return' marina';return'';}
+  function coordsOf(c){return [parseFloat(c.getAttribute('data-lat')),parseFloat(c.getAttribute('data-lng'))];}
   var US_VIEW={center:[39.5,-96],zoom:4.4}; // frames the continental US
-  function fitToVisible(){
+  function frameMap(animate){
     if(!map)return;
-    var pts=cards.filter(function(c){return !c.classList.contains('hide');})
-                 .map(function(c){return [parseFloat(c.getAttribute('data-lat')),parseFloat(c.getAttribute('data-lng'))];});
-    if(!pts.length)return;
-    if(pts.length===1){map.setView(pts[0],9);return;}
+    var vis=cards.filter(function(c){return !c.classList.contains('hide');});
+    if(!vis.length)return;
+    var pts=vis.map(coordsOf);
+    var opt=animate?{animate:true,duration:0.7}:{animate:false};
+    if(pts.length===1){ map.flyTo(pts[0],10,opt); return; }
     // Coast-to-coast set: use the tuned US view (Hawaii stays a pin you can pan to).
     var mainland=pts.filter(function(p){return p[1]>-140;});
     var lngs=mainland.map(function(p){return p[1];});
-    var spread=Math.max.apply(null,lngs)-Math.min.apply(null,lngs);
-    if(mainland.length===pts.length && spread>30){ map.setView(US_VIEW.center,US_VIEW.zoom); return; }
-    map.fitBounds(mainland.length>1?mainland:pts,{padding:[44,44],maxZoom:6});
+    var spread=lngs.length?Math.max.apply(null,lngs)-Math.min.apply(null,lngs):0;
+    if(mainland.length===pts.length && spread>30){
+      if(animate) map.flyTo(US_VIEW.center,US_VIEW.zoom,opt); else map.setView(US_VIEW.center,US_VIEW.zoom);
+      return;
+    }
+    var bpts=mainland.length>1?mainland:pts;
+    if(animate) map.flyToBounds(bpts,{padding:[46,46],maxZoom:6,duration:0.7}); else map.fitBounds(bpts,{padding:[46,46],maxZoom:6});
   }
+  function markerEl(id){var m=markers[id];return m&&m._icon?m._icon.querySelector('.jby-marker'):null;}
+  function setHover(card,on){ card.classList.toggle('active',on); var el=markerEl(card.id); if(el) el.classList.toggle('on',on); }
   function initMap(){
     if(!window.L){return;}
     map=L.map('loc-map',{scrollWheelZoom:true,wheelPxPerZoomLevel:90,zoomControl:true,attributionControl:true,minZoom:2,maxZoom:16,zoomSnap:0.25,zoomDelta:0.5});
@@ -376,46 +447,26 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
     }).addTo(map);
     map.setView(US_VIEW.center,US_VIEW.zoom);
     cards.forEach(function(c){
-      var lat=parseFloat(c.getAttribute('data-lat')),lng=parseFloat(c.getAttribute('data-lng'));
-      if(isNaN(lat)||isNaN(lng))return;
-      var name=c.querySelector('h3').textContent;
-      var addr=(c.querySelector('.lc-addr').innerHTML||'').replace(/<br\s*\/?>/gi,', ');
+      var ll=coordsOf(c); if(isNaN(ll[0])||isNaN(ll[1]))return;
       var icon=L.divIcon({className:'jby-divicon',html:'<div class="jby-marker'+typeClass(c)+'"></div>',iconSize:[16,16],iconAnchor:[8,8]});
-      var mk=L.marker([lat,lng],{icon:icon,title:name})
-        .bindPopup('<div class="lp-title">'+name+'</div><p class="lp-addr">'+addr+'</p>');
-      mk.on('click',function(){highlightCard(c,true);});
-      mk.addTo(map);
+      var mk=L.marker(ll,{icon:icon,title:c.querySelector('h3').textContent}).addTo(map);
+      mk.on('click',function(){ openModal(c); });
+      mk.on('mouseover',function(){ setHover(c,true); });
+      mk.on('mouseout',function(){ setHover(c,false); });
       markers[c.id]=mk;
     });
-    fitToVisible();
-    setTimeout(function(){map.invalidateSize();fitToVisible();},220);
+    frameMap(false);
+    setTimeout(function(){map.invalidateSize();frameMap(false);},220);
   }
 
-  var activeCard=null;
-  function highlightCard(card,scroll){
-    if(activeCard&&activeCard!==card)activeCard.classList.remove('active');
-    card.classList.add('active');activeCard=card;
-    var el=markers[card.id];
-    Object.keys(markers).forEach(function(k){var m=markers[k];if(m._icon)m._icon.querySelector('.jby-marker').classList.toggle('on',k===card.id);});
-    if(scroll&&window.matchMedia('(min-width:961px)').matches){
-      var y=card.getBoundingClientRect().top+window.scrollY-120;window.scrollTo({top:y,behavior:'smooth'});
-    }
-  }
-
-  // Card click -> center map + open popup (View location links not built yet)
+  // Card hover highlights its pin; pin hover highlights its card; click opens the preview
   cards.forEach(function(c){
-    c.addEventListener('click',function(e){
-      if(c.getAttribute('href')==='#')e.preventDefault();
-      if(map){
-        var lat=parseFloat(c.getAttribute('data-lat')),lng=parseFloat(c.getAttribute('data-lng'));
-        map.flyTo([lat,lng],9,{duration:.6});
-        var mk=markers[c.id];if(mk)mk.openPopup();
-      }
-      highlightCard(c,false);
-    });
+    c.addEventListener('mouseenter',function(){ setHover(c,true); });
+    c.addEventListener('mouseleave',function(){ setHover(c,false); });
+    c.addEventListener('click',function(e){ e.preventDefault(); openModal(c); });
   });
 
-  // ---- Filter ----
+  // ---- Filter (smoothly zooms to the selected set) ----
   tabs.forEach(function(tab){
     tab.addEventListener('click',function(){
       tabs.forEach(function(t){t.classList.remove('on');t.setAttribute('aria-selected','false');});
@@ -426,12 +477,45 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
         var show=(f==='all'||t.indexOf(f)>-1);
         c.classList.toggle('hide',!show);
         var mk=markers[c.id];
-        if(mk){if(show){mk.addTo(map);}else{if(map)map.removeLayer(mk);}}
+        if(mk){ if(show){mk.addTo(map);} else if(map){map.removeLayer(mk);} }
       });
-      if(activeCard&&activeCard.classList.contains('hide')){activeCard.classList.remove('active');activeCard=null;}
-      fitToVisible();
+      frameMap(true);
     });
   });
+
+  // ---- Office preview modal ----
+  var modal=document.getElementById('loc-modal');
+  var mPhoto=document.getElementById('loc-modal-photo'),mTitle=document.getElementById('loc-modal-title'),
+      mSub=document.getElementById('loc-modal-subtitle'),mAddr=document.getElementById('loc-modal-address'),
+      mPhone=document.getElementById('loc-modal-phone'),mHours=document.getElementById('loc-modal-hours'),
+      mExplore=document.getElementById('loc-modal-explore');
+  var modalCard=null;
+  function openModal(card){
+    modalCard=card;
+    var meta=OFFICE_META[card.getAttribute('data-slug')]||{};
+    var addr=card.querySelector('.lc-addr').textContent;
+    var phone=card.querySelector('.lc-phone').textContent;
+    mPhoto.style.backgroundImage=meta.photo?"url('./assets/"+meta.photo+"')":'';
+    mTitle.textContent=card.querySelector('h3').textContent;
+    mSub.textContent=meta.desc||'';
+    mAddr.textContent=addr;
+    mAddr.setAttribute('href','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(addr));
+    mPhone.textContent=phone;
+    mPhone.setAttribute('href','tel:'+(meta.tel||phone.replace(/[^0-9+]/g,'')));
+    mHours.textContent=meta.hours||'';
+    modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+  function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  if(modal){
+    modal.querySelectorAll('[data-close]').forEach(function(el){ el.addEventListener('click',closeModal); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) closeModal(); });
+    if(mExplore) mExplore.addEventListener('click',function(){
+      var card=modalCard; closeModal();
+      if(card&&map){ var ll=coordsOf(card); map.flyTo(ll,11,{duration:0.9});
+        Object.keys(markers).forEach(function(k){var el=markerEl(k); if(el) el.classList.toggle('on',k===card.id);}); }
+    });
+  }
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initMap);
   else initMap();
