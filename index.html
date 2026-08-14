@@ -114,6 +114,7 @@ main{padding-top:128px}
 .loc-modal-row dd{font-family:'Myriad Pro',sans-serif;font-weight:400;font-size:16px;line-height:22px;color:var(--ink);margin:0}
 .loc-modal-row dd a{color:var(--ink);text-decoration:none;transition:color .2s}
 .loc-modal-row dd a:hover{color:var(--navy)}
+.loc-modal-row dd .loc-hours-note{display:block;margin-top:3px;font-size:14px;line-height:20px;color:var(--mute);opacity:0.85}
 .loc-modal-cta{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:12px 22px;background:var(--navy);color:#fff;
   font-family:'Mesmerize',sans-serif;font-weight:300;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;border:0;border-radius:1px;cursor:pointer;transition:background .25s}
 .loc-modal-cta:hover{background:var(--navy-d)}
@@ -217,7 +218,7 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
 <main>
   <section class="wrap loc-head">
     <h1 class="split-words" data-split>Our Locations</h1>
-    <p class="reveal d1">Coast to coast, from full-service marinas to sales and service centers.</p>
+    <p class="reveal d1">Coast to coast, from full-service marinas to dedicated sales and service centers.</p>
   </section>
 
   <section class="wrap">
@@ -344,7 +345,7 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
       </nav>
     </div>
     <div class="foot-col">
-      <h6>Contact us</h6><p>(888) 693-8099</p>
+      <h6>Contact us</h6><p>+1 (888) 693-8099</p>
       <h6>Email</h6><p>info@jeffbrownyachts.com</p>
       <h6>Social Media</h6>
       <div class="foot-social">
@@ -441,7 +442,7 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
   function setHover(card,on){ card.classList.toggle('active',on); var el=markerEl(card.id); if(el) el.classList.toggle('on',on); }
   function initMap(){
     if(!window.L){return;}
-    map=L.map('loc-map',{scrollWheelZoom:true,wheelPxPerZoomLevel:90,zoomControl:true,attributionControl:true,minZoom:2,maxZoom:16,zoomSnap:0.25,zoomDelta:0.5});
+    map=L.map('loc-map',{scrollWheelZoom:true,wheelPxPerZoomLevel:38,wheelDebounceTime:18,zoomControl:true,attributionControl:true,minZoom:2,maxZoom:16,zoomSnap:0.25,zoomDelta:0.5});
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
       subdomains:'abcd',maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'
     }).addTo(map);
@@ -502,7 +503,7 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
     mAddr.setAttribute('href','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(addr));
     mPhone.textContent=phone;
     mPhone.setAttribute('href','tel:'+(meta.tel||phone.replace(/[^0-9+]/g,'')));
-    mHours.textContent=meta.hours||'';
+    mHours.innerHTML=(meta.hours?'<span>'+meta.hours+'</span>':'')+'<span class="loc-hours-note">Weekends and private viewings by appointment</span>';
     modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';
   }
