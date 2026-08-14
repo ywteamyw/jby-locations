@@ -439,7 +439,9 @@ footer{background:var(--paper);padding:40px 40px 80px;color:var(--mute);font-siz
   function setHover(card,on){ card.classList.toggle('active',on); var el=markerEl(card.id); if(el) el.classList.toggle('on',on); }
   function initMap(){
     if(!window.L){return;}
-    map=L.map('loc-map',{scrollWheelZoom:true,wheelPxPerZoomLevel:38,wheelDebounceTime:18,zoomControl:true,attributionControl:true,minZoom:2,maxZoom:16,zoomSnap:0.25,zoomDelta:0.5});
+    // Exact same zoom settings as the Office page map (zoomSnap default 1 => each
+    // scroll tick rounds up to a full level, so trackpad zoom feels punchy).
+    map=L.map('loc-map',{scrollWheelZoom:true,wheelPxPerZoomLevel:90,zoomControl:true,attributionControl:true,minZoom:2,maxZoom:16});
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
       subdomains:'abcd',maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'
     }).addTo(map);
